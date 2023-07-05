@@ -1,22 +1,14 @@
 class RecipesController < ApplicationController
     def index
-        if session[:user_id]
-            recipes = Recipe.where(user_id: session[:user_id])  
-            render json: recipes, status: :ok
-        else  
-            render json: {errors: ["Not authorized"]}, status: :unauthorized
-        end
+        recipes = Recipe.where(user_id: session[:user_id])  
+        render json: recipes, status: :ok
     end
 
     def create
         user = User.find_by(id: session[:user_id])
 
-        if user
-            recipe = user.recipes.create!(recipe_params)
-            render json: recipe, status: :created
-        else  
-            render json: {errors: ["Not authorized"]}, status: :unauthorized
-        end
+        recipe = user.recipes.create!(recipe_params)
+        render json: recipe, status: :created
     end
 
     private 
